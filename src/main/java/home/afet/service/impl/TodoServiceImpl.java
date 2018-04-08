@@ -11,7 +11,14 @@ import java.util.Objects;
 @Service
 public class TodoServiceImpl implements TodoService {
 
-    List<Todo> todos;
+    private List<Todo> todos;
+
+
+    @Override
+    public boolean addAll(List<Todo> allTodos) {
+        allTodos.forEach(this::put);
+        return true;
+    }
 
     @Override
     public List<Todo> getAllTodo() {
@@ -20,22 +27,21 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public boolean post(Todo todo) {
-        Todo tempTodo = todos.stream().filter(elem -> elem.getId() == todo.getId()).findAny().orElseGet(null);
-        if (Objects.isNull(tempTodo)) {
+            if(todos.parallelStream().anyMatch(el->el.getId() == todo.getId()))return false;
             todos.add(todo);
             return true;
-        } else
-            return false;
     }
 
     @Override
     public Todo get(int id) {
-        return todos.parallelStream().filter(elem -> elem.getId() == id).findAny().orElseGet(null);
+        if(todos.parallelStream().anyMatch(el->el.getId() == id))
+        return todos.parallelStream().filter(elem -> elem.getId() == id).findAny().get();
+        else  return null;
     }
 
     @Override
     public boolean delete(int id) {
-        Todo tempTodo = todos.stream().filter(elem -> elem.getId() == id).findAny().orElseGet(null);
+        Todo tempTodo = todos.stream().filter(elem -> elem.getId() == id).findAny().get();
         if (Objects.isNull(tempTodo)) {
             return false;
         } else
@@ -45,7 +51,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public boolean put(Todo todo) {
-        Todo tempTodo = todos.stream().filter(elem -> elem.getId() == todo.getId()).findAny().orElseGet(null);
+        Todo tempTodo = todos.stream().filter(elem -> elem.getId() == todo.getId()).findAny().get();
         if (Objects.isNull(tempTodo)) {
             return false;
         } else {

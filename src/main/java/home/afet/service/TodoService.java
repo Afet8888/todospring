@@ -10,4 +10,5 @@ public interface TodoService {
     Todo get (int id);
     boolean delete (int id);
     boolean put (Todo todo);
+    boolean addAll(List<Todo> allTodos);
 }

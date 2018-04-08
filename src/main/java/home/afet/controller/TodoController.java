@@ -20,6 +20,11 @@ public class TodoController {
         return todoService.getAllTodo();
     }
 
+    @PostMapping("/postAll")
+    boolean postAllTodo(@RequestBody List<Todo> tods) {
+        return todoService.addAll(tods);
+    }
+
     @GetMapping("/{id}")
     Todo getById(@PathVariable int id) {
         return todoService.get(id);
